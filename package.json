@@ -1,0 +1,11 @@
+{
+  "name": "rest-nyc",
+  "version": "1.0.0",
+  "description": "restroom finder API for nyc",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Anna Teng",
+  "license": "MIT"
+}
