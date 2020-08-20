@@ -1,0 +1,14 @@
+{
+  "watch": [
+    "package.json",
+    "nodemon.json",
+    ".eslintrc.json",
+    ".babelrc",
+    "bin/",
+    "public/",
+    "routes/",
+    "views/"
+  ],
+  "verbose": true,
+  "ignore": ["*.test.js", "*.spec.js"]
+}
