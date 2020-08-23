@@ -7,7 +7,9 @@
     "bin/",
     "public/",
     "routes/",
-    "views/"
+    "views/",
+    "controllers/",
+    "app.js"
   ],
   "verbose": true,
   "ignore": ["*.test.js", "*.spec.js"]
