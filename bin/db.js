@@ -10,6 +10,5 @@ const dbConfig = {
   password: process.env.RDS_PASSWORD,
   port: process.env.RDS_PORT,
 };
-console.log(dbConfig);
 
 module.exports = new pg.Pool(dbConfig);
