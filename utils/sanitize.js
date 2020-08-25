@@ -2,8 +2,9 @@ const fs = require('fs').promises;
 const path = require('path');
 require('dotenv').config();
 const { Client } = require('@googlemaps/google-maps-services-js');
-
 const logger = require('./logger');
+
+const filePath = process.argv.length > 2 ? process.argv[2] : '../data/mappler-data.json';
 
 const complete = [];
 const noAddr = [];
@@ -79,27 +80,29 @@ const tryApi = async (client, formattedAddr) => {
 };
 
 const getApiPromise = (d, client) => new Promise((resolve, reject) => {
-  const addr = d.address;
-  if (addr.length === 0) {
-    noAddr.push(d);
-    resolve();
+  const { address, name } = d;
+  let searchStr;
+  if (address.length === 0) {
+    searchStr = `${name.replace(/\s/g, '+')}+New+York,+NY`;
   } else {
-    const formattedAddr = hasZip(addr)
-      ? addr.replace(/\s/g, '+')
-      : `${addr.replace(/\s/g, '+')}+New+York,+NY`;
+    const formattedAddr = hasZip(address)
+      ? address.replace(/\s/g, '+')
+      : `${address.replace(/\s/g, '+')}+New+York,+NY`;
 
-    tryApi(client, formattedAddr)
-      .then((res) => {
-        handleApiData(d, res);
-        resolve();
-      }).catch((err) => {
-        reject(err);
-      });
+    searchStr = `${name.replace(/\s/g, '+')}+${formattedAddr}`;
   }
+
+  tryApi(client, searchStr)
+    .then((res) => {
+      handleApiData(d, res);
+      resolve();
+    }).catch((err) => {
+      reject(err);
+    });
 });
 
 // main script
-fs.readFile(path.join(__dirname, '../data/mappler-data.json'))
+fs.readFile(path.join(__dirname, filePath))
   .then((data) => {
     const rawData = JSON.parse(data);
     // logger.info(rawData);
