@@ -1,0 +1,29 @@
+[
+  {
+    "index": "2718",
+    "name": "Mini",
+    "category": "Public",
+    "address": "",
+    "hours": "",
+    "handicap": "",
+    "editor": ""
+  },
+  {
+    "index": "2717",
+    "name": "Brooklyn Roadting Compny",
+    "category": "Coffee Shop",
+    "address": "45 Washington St, Brooklyn, NY 11201, USA",
+    "hours": "7am-7pm",
+    "handicap": "",
+    "editor": ""
+  },
+  {
+    "index": "2701",
+    "name": "Indikitch",
+    "category": "Fast Food",
+    "address": "25 west 23 Street ",
+    "hours": "",
+    "handicap": "Yes",
+    "editor": ""
+  }
+]

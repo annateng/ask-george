@@ -1,9 +1,12 @@
+/* eslint-disable no-console */
+require('dotenv').config();
+
 const info = (...params) => {
-  console.log(...params); // eslint-disable-line
+  if (process.env.NODE_ENV !== 'production') console.log(...params);
 };
 
 const error = (...params) => {
-  console.error(...params);
+  if (process.env.NODE_ENV !== 'production') console.error(...params);
 };
 
 module.exports = {
