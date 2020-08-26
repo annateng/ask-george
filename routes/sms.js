@@ -1,16 +1,21 @@
 const express = require('express');
 const { MessagingResponse } = require('twilio').twiml;
+const logger = require('../utils/logger');
+const { formulateResponse } = require('../controllers/txtController');
 
 const router = express.Router();
 
-/* GET users listing. */
+/* TWILIO handler - TWILIO will post to this route on incoming text */
 router.post('/', (req, res) => {
-  const twiml = new MessagingResponse();
+  formulateResponse(req.body)
+    .then((textBack) => {
+      const twiml = new MessagingResponse();
+      twiml.message(textBack);
 
-  twiml.message('test message');
-
-  res.writeHead(200, { 'Content-Type': 'text/xml' });
-  res.end(twiml.toString());
+      res.writeHead(200, { 'Content-Type': 'text/xml' });
+      res.end(twiml.toString());
+    })
+    .catch((err) => logger.error(err));
 });
 
 module.exports = router;
