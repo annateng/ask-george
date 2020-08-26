@@ -19,7 +19,8 @@
     "morgan": "~1.9.1",
     "pg": "^8.3.2",
     "pug": "^3.0.0",
-    "puppeteer": "^5.2.1"
+    "puppeteer": "^5.2.1",
+    "twilio": "^3.49.0"
   },
   "devDependencies": {
     "eslint": "^7.7.0",
