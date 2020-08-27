@@ -91,20 +91,26 @@ const formulateResponse = (reqBody) => {
             place_id: r.place_id,
           },
         })
-          .then((placeDetails) => resolve({
-            api_hours: placeDetails.data.result.opening_hours,
-            api_name: placeDetails.data.result.name,
-            business_status: placeDetails.data.result.business_status,
-            url: placeDetails.data.result.url,
-            ...r,
-          }))
+          .then((placeDetails) => {
+            logger.info(placeDetails.data.result);
+            // account for temp closing
+            //  eslint-disable-next-line no-param-reassign
+            if (placeDetails.data.result.business_status === 'CLOSED_TEMPORARILY') r.hours = 'Temporarily Closed';
+            resolve({
+              api_hours: placeDetails.data.result.opening_hours,
+              api_name: placeDetails.data.result.name,
+              business_status: placeDetails.data.result.business_status,
+              url: placeDetails.data.result.url,
+              ...r,
+            });
+          })
           .catch((err) => reject(err));
       }));
 
       return Promise.all(placeDetailPromiseArr);
     })
     .then((details) => {
-      logger.info('DETAILS', details); // DEBUG
+      // logger.info('DETAILS', details); // DEBUG
       // update hours in database
       details.forEach((det) => {
         if (det.api_hours) {
