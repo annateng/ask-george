@@ -7,15 +7,26 @@ const router = express.Router();
 
 /* TWILIO handler - TWILIO will post to this route on incoming text */
 router.post('/', (req, res) => {
-  formulateResponse(req.body)
-    .then((textBack) => {
-      const twiml = new MessagingResponse();
-      twiml.message(textBack);
+  const { Body } = req.body;
+  logger.info(Body);
+  const twiml = new MessagingResponse();
 
-      res.writeHead(200, { 'Content-Type': 'text/xml' });
-      res.end(twiml.toString());
-    })
-    .catch((err) => logger.error(err));
+  switch (Body.toLowerCase()) {
+    case 'info':
+    case 'help':
+      // do nothing - twilio handles this response
+      return null;
+    default:
+      return formulateResponse(req.body)
+        .then((textBack) => {
+          twiml.message(textBack);
+          twiml.message('test');
+
+          res.writeHead(200, { 'Content-Type': 'text/xml' });
+          res.end(twiml.toString());
+        })
+        .catch((err) => logger.error(err));
+  }
 });
 
 module.exports = router;
