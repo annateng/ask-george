@@ -64,8 +64,6 @@ pool.query(dropIfQuery)
 
     return Promise.all(queries);
   })
-  .then(() => {
-    return pool.query('SELECT * FROM bathrooms');
-  })
-  .then((res) => logger.info(res))
+  .then(() => pool.query('SELECT * FROM bathrooms'))
+  .then((res) => logger.info(res.rows))
   .catch((err) => logger.error(err));

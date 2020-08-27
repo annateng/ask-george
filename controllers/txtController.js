@@ -1,26 +1,17 @@
 require('dotenv').config();
 const { Client } = require('@googlemaps/google-maps-services-js');
-// const client = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_AUTH);
+const { BitlyClient } = require('bitly');
 const logger = require('../utils/logger');
+const {
+  checkUserQuery, newUserQuery, recordTextQuery, selectNearest, updateHours, updateName,
+} = require('../utils/queries');
 const pool = require('../bin/db');
 
 const client = new Client({});
+const bitlyClient = new BitlyClient(process.env.BITLY_ACCESS_TOKEN, {});
 
-const checkUserQuery = `
-SELECT COUNT(phone_number)
-FROM users
-WHERE phone_number = $1
-`;
-
-const newUserQuery = `
-INSERT INTO users(phone_number, city, state, country, zip)
-VALUES($1, $2, $3, $4, $5)
-`;
-
-const recordTextQuery = `
-INSERT INTO texts_received(phone_number, text)
-VALUES($1, $2)
-`;
+const notFoundStr = 'Address not found.';
+const multiResStr = 'Multiple address matches. Please be more specific.';
 
 const getSearchStr = (txt) => {
   const hasZip = txt.match(/\d{5}$/);
@@ -55,22 +46,25 @@ const formulateResponse = (reqBody) => {
       const resCount = res.rows[0].count;
       logger.info(resCount);
 
-      if (resCount === '0') { // create new user
+      // user not found: create new user
+      if (resCount === '0') {
         return pool.query(newUserQuery, [From, FromCity, FromState, FromCountry, FromZip])
           .then(() => pool.query(recordTextQuery, [From, Body]));
       }
 
-      if (resCount.count > 1) { // duplicate phone number - throw error
+      // duplicate phone number: throw error
+      if (resCount.count > 1) {
         throw new Error(`Duplicate phone number in DB for ${From}`);
       }
 
-      // add query to texts received table
+      // else: add query to texts received table
       return pool.query(recordTextQuery, [From, Body]);
     })
     .then(() => {
       // query google api for user current location
       const searchStr = getSearchStr(Body);
-      logger.info(searchStr); // DEBUG
+      // logger.info(searchStr); // DEBUG
+
       return client.geocode({
         params: {
           address: searchStr,
@@ -79,9 +73,92 @@ const formulateResponse = (reqBody) => {
       });
     })
     .then((res) => {
-      logger.info(res.data.results);
+      // logger.info(res.data.results); // DEBUG
+      // throw err to break out of primise chain here
+      if (res.data.status !== 'OK') throw new Error(notFoundStr);
+      if (res.data.results.length > 1) throw new Error(multiResStr);
+
+      const locData = res.data.results[0];
+      const { lng, lat } = locData.geometry.location;
+
+      return pool.query(selectNearest, [lat, lng, 5, 0]);
     })
-    .catch((err) => { throw err; });
+    .then((res) => {
+      const placeDetailPromiseArr = res.rows.map((r) => new Promise((resolve, reject) => {
+        client.placeDetails({
+          params: {
+            key: process.env.GOOGLE_MAPS_API_KEY,
+            place_id: r.place_id,
+          },
+        })
+          .then((placeDetails) => resolve({
+            api_hours: placeDetails.data.result.opening_hours,
+            api_name: placeDetails.data.result.name,
+            business_status: placeDetails.data.result.business_status,
+            url: placeDetails.data.result.url,
+            ...r,
+          }))
+          .catch((err) => reject(err));
+      }));
+
+      return Promise.all(placeDetailPromiseArr);
+    })
+    .then((details) => {
+      logger.info('DETAILS', details); // DEBUG
+      // update hours in database
+      details.forEach((det) => {
+        if (det.api_hours) {
+          const hoursString = det.api_hours.weekday_text.join('\n');
+          pool.query(updateHours, [hoursString, det.id]);
+          det.hours = hoursString; // eslint-disable-line no-param-reassign
+        }
+      });
+
+      // update name in database
+      details.forEach((det) => {
+        if (!det.name && det.api_name) {
+          pool.query(updateName, [det.api_name, det.id]);
+        }
+      });
+
+      // create output string
+      const outputPromiseArr = details.map((det) => new Promise((resolve, reject) => {
+        // google api goes monday -> sunday. js goes sunday -> saturday
+        const dayNo = (new Date().getDay() + 5) % 6;
+        // logger.info(dayNo, new Date().getDay());
+
+        const name = det.name ? det.name : det.api_name;
+        const distance = det.distance < 0.1 ? '<0.1 mi' : `${Math.trunc(det.distance)}.${Math.trunc(det.distance * 10) % 10} mi`;
+        const type = det.category ? det.category : 'na';
+
+        let hours;
+        if (det.api_hours) hours = det.api_hours.weekday_text[dayNo].replace(':', ',');
+        else if (det.hours) hours = det.hours;
+        else hours = 'na';
+
+        bitlyClient.shorten(det.url)
+          .then((shortUrl) => {
+            // logger.info(shortUrl);
+
+            resolve(`
+ID: ${det.id}
+Name: ${name}
+Type: ${type}
+Distance: ${distance}
+Hours: ${hours}
+Directions: ${shortUrl.id}
+          `.trim());
+          })
+          .catch((err) => reject(err));
+      }));
+
+      return Promise.all(outputPromiseArr);
+    })
+    .then((outputStrs) => outputStrs.join('\n\n'))
+    .catch((err) => {
+      if (err.message === notFoundStr || err.message === multiResStr) return err.message;
+      throw err;
+    });
 };
 
 module.exports = { formulateResponse };

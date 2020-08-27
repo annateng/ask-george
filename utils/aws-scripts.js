@@ -1,5 +1,6 @@
 const pool = require('../bin/db');
 const logger = require('./logger');
+const { deleteDupes } = require('./queries');
 
 // const query = `
 // ALTER TABLE bathrooms
@@ -33,11 +34,16 @@ const logger = require('./logger');
 //     FOREIGN KEY(phone_number) REFERENCES users(phone_number)
 // )`;
 
-const query = `
-SELECT *
-FROM users
-`;
+// const query = `
+// SELECT table_name FROM information_schema.tables WHERE table_schema='public'
+// AND table_type='BASE TABLE'
+// `;
 
-pool.query(query)
+// const query = `
+// ALTER TABLE bathrooms
+// ADD COLUMN hours_last_updated timestamp
+// `;
+
+pool.query('SELECT count(*) FROM bathrooms')
   .then((res) => logger.info(res.rows))
   .catch((err) => logger.error(err));

@@ -8,6 +8,7 @@
     "public/",
     "routes/",
     "views/",
+    "utils/",
     "controllers/",
     "app.js"
   ],
