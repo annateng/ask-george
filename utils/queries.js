@@ -52,6 +52,38 @@ WHERE id = $2
 RETURNING *
 `;
 
+const updateActive = `
+UPDATE users
+SET last_active = NOW()
+WHERE phone_number = $1
+`;
+
+const getDiffLastActive = `
+SELECT age(NOW(), last_active) 
+FROM users 
+WHERE phone_number = $1
+`;
+
+const updateLoc = `
+UPDATE users
+SET active_loc_lng = $1,
+active_loc_lat = $2
+WHERE phone_number = $3
+`;
+
+const getLoc = `
+SELECT active_loc_lng, active_loc_lat
+FROM users
+WHERE phone_number = $1
+`;
+
+const incrementPageNo = `
+UPDATE users
+SET next_page_no = $1
+WHERE phone_number = $2
+RETURNING *
+`;
+
 module.exports = {
   checkUserQuery,
   newUserQuery,
@@ -61,4 +93,9 @@ module.exports = {
   deleteDupes,
   updateHours,
   updateName,
+  updateActive,
+  getDiffLastActive,
+  updateLoc,
+  getLoc,
+  incrementPageNo,
 };

@@ -9,9 +9,9 @@ const { deleteDupes } = require('./queries');
 // `;
 
 // const query = `
-// SELECT *
+// SELECT column_name, data_type
 // FROM information_schema.columns
-// WHERE table_name = 'bathrooms'
+// WHERE table_name = 'users'
 // `;
 
 // const query = `
@@ -44,6 +44,12 @@ const { deleteDupes } = require('./queries');
 // ADD COLUMN hours_last_updated timestamp
 // `;
 
-pool.query('SELECT count(*) FROM bathrooms')
+// const query = `
+// ALTER TABLE users
+// ADD COLUMN active_loc_lng real,
+// ADD COLUMN active_loc_lat real
+// `;
+
+pool.query('Select * from users')
   .then((res) => logger.info(res.rows))
   .catch((err) => logger.error(err));
