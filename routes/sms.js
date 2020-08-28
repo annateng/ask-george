@@ -45,42 +45,39 @@ const getResponse = (body) => {
             pool.query(queries.recordTextQuery, [From, Body]);
             // update last active
             pool.query(queries.updateActive, [From]);
-            return false;
+            return helpText;
           });
       }
 
       // add query to texts received table
       pool.query(queries.recordTextQuery, [From, Body]);
       pool.query(queries.updateActive, [From]);
-      return checkActive(From);
-    })
-    .then((isActive) => {
-      logger.info('ISACTIVE', isActive);
-      // if user said "Next" and he's active, get next page of results
-      if (isActive && Body.toLowerCase().trim() === 'next') {
-        logger.info('getting next');
-        return pool.query(queries.getPageNo, [From])
-          .then((pageNo) => nextPage(pageNo.rows[0].next_page_no, From));
-      }
-      // if user said "next" and he's not active, send him the help message
-      if (!isActive && Body.toLowerCase().trim() === 'next') {
-        return helpText;
-      }
+      return checkActive(From)
+        .then((isActive) => {
+          // if user said "Next" and he's active, get next page of results
+          if (isActive && Body.toLowerCase().trim() === 'next') {
+            return pool.query(queries.getPageNo, [From])
+              .then((pageNo) => nextPage(pageNo.rows[0].next_page_no, From));
+          }
+          // if user said "next" and he's not active, send him the help message
+          if (!isActive && Body.toLowerCase().trim() === 'next') {
+            return helpText;
+          }
 
-      // else, initiate new search
-      logger.info('getting new');
-      return newSearch(Body, From);
-    })
-    .then((textBack) => {
-      logger.info(textBack);
-      return client.messages.create({
-        body: textBack,
-        from: process.env.NODE_ENV !== 'production' ? '+15005550006' : '+13258538637',
-        to: From,
-      });
-    })
-    .then((message) => {
-      logger.info(message.sid);
+          // else, initiate new search
+          return newSearch(Body, From);
+        })
+        .then((textBack) => {
+          logger.info(textBack);
+          return client.messages.create({
+            body: textBack,
+            from: process.env.NODE_ENV !== 'production' ? '+15005550006' : '+13258538637',
+            to: From,
+          });
+        })
+        .then((message) => {
+          logger.info(message.sid);
+        });
     })
     .catch((err) => logger.error(err));
 };

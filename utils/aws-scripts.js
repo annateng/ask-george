@@ -50,6 +50,6 @@ const { deleteDupes } = require('./queries');
 // ADD COLUMN active_loc_lat real
 // `;
 
-pool.query('Select * from users')
+pool.query('Delete from users')
   .then((res) => logger.info(res.rows))
   .catch((err) => logger.error(err));
