@@ -66,17 +66,6 @@ const getResponse = (body) => {
 
           // else, initiate new search
           return newSearch(Body, From);
-        })
-        .then((textBack) => {
-          logger.info(textBack);
-          return client.messages.create({
-            body: textBack,
-            from: process.env.NODE_ENV !== 'production' ? '+15005550006' : '+13258538637',
-            to: From,
-          });
-        })
-        .then((message) => {
-          logger.info(message.sid);
         });
     })
     .catch((err) => logger.error(err));
@@ -84,7 +73,7 @@ const getResponse = (body) => {
 
 /* TWILIO handler - TWILIO will post to this route on incoming text */
 router.post('/', (req) => {
-  const { Body } = req.body;
+  const { Body, From } = req.body;
   // logger.info(Body.toLowerCase());
   // const twiml = new MessagingResponse();
 
@@ -97,7 +86,18 @@ router.post('/', (req) => {
     case 'unstop':
       break;
     default:
-      getResponse(req.body);
+      getResponse(req.body)
+        .then((textBack) => {
+          logger.info(textBack);
+          return client.messages.create({
+            body: textBack,
+            from: process.env.NODE_ENV !== 'production' ? '+15005550006' : '+13258538637',
+            to: From,
+          });
+        })
+        .then((message) => {
+          logger.info(message.sid);
+        });
   }
 });
 
