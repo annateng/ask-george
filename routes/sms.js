@@ -28,7 +28,7 @@ const getResponse = (body) => {
   } = body;
 
   // check if first time user
-  pool.query(queries.checkUserQuery, [From])
+  return pool.query(queries.checkUserQuery, [From])
     .then((res) => {
       const resCount = res.rows[0].count;
 
