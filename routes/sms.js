@@ -17,10 +17,10 @@ router.post('/', (req, res) => {
       // do nothing - twilio handles this response
       return null;
     default:
+      logger.info(Body.toLowerCase());
       return formulateResponse(req.body)
         .then((textBack) => {
           twiml.message(textBack);
-          twiml.message('test');
 
           res.writeHead(200, { 'Content-Type': 'text/xml' });
           res.end(twiml.toString());
