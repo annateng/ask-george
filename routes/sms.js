@@ -1,13 +1,17 @@
 require('dotenv').config();
 const express = require('express');
 // const { MessagingResponse } = require('twilio').twiml;
-const client = require('twilio')(process.env.TWILIO_TEST_SID, process.env.TWILIO_TEST_AUTH);
+const twilio = require('twilio');
 const pool = require('../bin/db');
 const logger = require('../utils/logger');
 const queries = require('../utils/queries');
 const { newSearch, nextPage, checkActive } = require('../controllers/txtController');
 
 const router = express.Router();
+
+const sid = process.env.NODE_ENV === 'production' ? process.env.TWILIO_SID : process.env.TWILIO_TEST_SID;
+const auth = process.env.NODE_ENV === 'production' ? process.env.TWILIO_AUTH : process.env.TWILIO_TEST_AUTH;
+const client = twilio(sid, auth);
 
 const helpText = `Welcome to Let-Me-P NYC!
  
