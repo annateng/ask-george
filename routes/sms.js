@@ -17,7 +17,7 @@ router.post('/', (req, res) => {
       // do nothing - twilio handles this response
       return null;
     default:
-      logger.info(Body.toLowerCase());
+      console.log(Body.toLowerCase());
       return formulateResponse(req.body)
         .then((textBack) => {
           twiml.message(textBack);
