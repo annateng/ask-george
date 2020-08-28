@@ -44,7 +44,7 @@ const formulateResponse = (reqBody) => {
   return pool.query(checkUserQuery, [From])
     .then((res) => {
       const resCount = res.rows[0].count;
-      logger.info(resCount);
+      // logger.info(resCount);
 
       // user not found: create new user
       if (resCount === '0') {
@@ -92,7 +92,7 @@ const formulateResponse = (reqBody) => {
           },
         })
           .then((placeDetails) => {
-            logger.info(placeDetails.data.result);
+            // logger.info(placeDetails.data.result);
             // account for temp closing
             //  eslint-disable-next-line no-param-reassign
             if (placeDetails.data.result.business_status === 'CLOSED_TEMPORARILY') r.hours = 'Temporarily Closed';
