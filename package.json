@@ -1,6 +1,6 @@
 {
-  "name": "rest-nyc",
-  "version": "0.0.0",
+  "name": "ask-george",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "NODE_ENV=production node ./bin/www",
@@ -17,10 +17,10 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jsdom": "^16.4.0",
+    "moment-timezone": "^0.5.31",
     "morgan": "~1.9.1",
     "pg": "^8.3.2",
     "pug": "^3.0.0",
-    "puppeteer": "^5.2.1",
     "twilio": "^3.49.0"
   },
   "devDependencies": {

@@ -1,5 +1,23 @@
 extends layout
+block footer
+  div#footer Copyright 2020 Anna Teng
+
 
 block content
-  h1= title
-  p Welcome to #{title}
+  div#content
+    img#main-logo(src='images/Ask george horizontal.jpg' alt='Ask George Logo')
+    h1 Welcome to #{title} NYC
+    div
+      p We'll text you the nearest closest public restrooms based on your location.
+      p To get started, send a text to <b class=emph>1-3258-LET-ME-P</b> (1-325-853-8637).
+    div.smallfont
+      ul
+        li Data from 
+          a(href='http://m3.mappler.net/nyrestroom/' target='_blank') nyrestroom.com
+        li Have a favorite public restroom that we're missing? We'd love to hear from you!
+          div
+            a(href='/submit') Submit a new bathroom
+        li
+          a(href='https://github.com/annateng/ask-george') View code on Github
+    
+  

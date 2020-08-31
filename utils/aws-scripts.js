@@ -11,7 +11,7 @@ const { deleteDupes } = require('./queries');
 // const query = `
 // SELECT column_name, data_type
 // FROM information_schema.columns
-// WHERE table_name = 'users'
+// WHERE table_name = 'bathrooms'
 // `;
 
 // const query = `
@@ -47,9 +47,7 @@ const { deleteDupes } = require('./queries');
 // const query = `
 // ALTER TABLE users
 // ADD COLUMN active_loc_lng real,
-// ADD COLUMN active_loc_lat real
-// `;
-
-pool.query('Delete from users')
+// ADD COLUMN active_loc_lat select * from users
+pool.query('select count(phone_number) from users')
   .then((res) => logger.info(res.rows))
   .catch((err) => logger.error(err));
