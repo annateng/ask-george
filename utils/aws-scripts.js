@@ -11,7 +11,7 @@ const { deleteDupes } = require('./queries');
 // const query = `
 // SELECT column_name, data_type
 // FROM information_schema.columns
-// WHERE table_name = 'users'
+// WHERE table_name = 'bathrooms'
 // `;
 
 // const query = `
@@ -49,11 +49,15 @@ const { deleteDupes } = require('./queries');
 // ADD COLUMN active_loc_lng real,
 // ADD COLUMN active_loc_lat select * from users
 
+// const query = `
+// SELECT COUNT(phone_number)
+// FROM users
+// WHERE last_active > now() - INTERVAL '3 days'
+// `;
+
 const query = `
-SELECT COUNT(phone_number)
-FROM users
-WHERE last_active > now() - INTERVAL '3 days'
-`
+SELECT DISTINCT category FROM bathrooms`;
+
 pool.query(query)
   .then((res) => logger.info(res.rows))
   .catch((err) => logger.error(err));

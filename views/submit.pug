@@ -1,0 +1,106 @@
+extends layout
+
+block content
+  div.wrapper
+    h2.emph Submit a New Bathroom
+    br
+    form(onsubmit='handleSubmit(event);')
+      div.row
+        label(for='venueName') Venue Name
+          span.red *
+        input(type='text', id='venueName', name='venueName')
+      div.row.hidden.errMsg(id='venueNameErr')
+        span.offset.small.red This is a required field
+      div.row
+        label(for='venueType') Venue Type
+          span.red *
+        select(name='venueType', id='venueType')
+          option.hidden
+          option(value='public') Public
+          option(value='fastFood') Fast Food
+          option(value='bookStore') Book Store
+          option(value='coffeeShop') Coffee Shop
+          option(value='other') Other
+      div.row.hidden.errMsg(id='venueTypeErr')
+        span.offset.small.red This is a required field
+      div.row
+        label(for='hours') Hours
+        textarea(name='hours', id='hours', rows=5)
+      div.row
+      div.row
+        label(for='streetAddr') Street Address
+          span.red *
+        input(type='text', id='streetAddr', name='streetAddr')
+      div.row.hidden.errMsg(id='streetAddrErr')
+        span.offset.small.red This is a required field
+      div.row
+        label(for='city') City
+          span.red *
+        input(type='text', id='city', name='city')
+      div.row.hidden.errMsg(id='cityErr')
+        span.offset.small.red This is a required field
+      div.row
+        label(for='zip') Zip Code
+          span.red *
+        input(type='text', id='zip', name='zip')
+      div.row.hidden.errMsg(id='zipErr')
+        span.offset.small.red This is a required field
+      div.row
+        button.offset(type='submit') Submit
+  script.
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      // get values
+      const formData = new FormData(event.target);
+      const formValues = {};
+      formData.forEach((val, key) => {
+        formValues[key] = val;
+      });
+
+      // form validation
+      if (!formValues.venueName) {
+        document.getElementById('venueNameErr').style.display = 'block';
+      } else {
+        document.getElementById('venueNameErr').style.display = 'none';
+      }
+
+      if (!formValues.venueType) {
+        document.getElementById('venueTypeErr').style.display = 'block';
+      } else {
+        document.getElementById('venueTypeErr').style.display = 'none';
+      }
+
+      if (!formValues.streetAddr) {
+        document.getElementById('streetAddrErr').style.display = 'block';
+      } else {
+        document.getElementById('streetAddrErr').style.display = 'none';
+      }
+
+      if (!formValues.city) {
+        document.getElementById('cityErr').style.display = 'block';
+      } else {
+        document.getElementById('cityErr').style.display = 'none';
+      }
+
+      if (!formValues.zip) {
+        const zipErr = document.getElementById('zipErr');
+        zipErr.childNodes[0].innerText = 'This is a required field';
+        zipErr.style.display = 'block';
+      } else if (!formValues.zip.match(/^\d{5}$/)) {
+        const zipErr = document.getElementById('zipErr');
+        zipErr.childNodes[0].innerText = 'Invalid zip code';
+        zipErr.style.display = 'block';
+      } else {
+        document.getElementById('zipErr').style.display = 'none';
+      }
+
+      fetch('/api/submit', {
+        method: 'POST',
+        body: JSON.stringify(formValues),
+        headers: { 
+        'Content-type': 'application/json; charset=UTF-8'
+        } 
+      })
+    } 
+
+

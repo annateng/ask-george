@@ -1,18 +1,176 @@
-body {
-  font-family: 'Quicksand', sans-serif;
-  font-size: 30px;
-  background-color: #FFE2E2;
-  position: absolute;
-  box-sizing: border-box;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
+/*	Less Framework 4 with 18/24 type presets
+	http://lessframework.com
+	by Joni Korpi
+	License: http://opensource.org/licenses/mit-license.php	*/
+
+
+
+/*	Resets
+	------	*/
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6,
+p, blockquote, pre, a, abbr, address, cite, code, del, dfn, em,
+img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, hr,
+dl, dt, dd, ol, ul, li, fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figure, figcaption, hgroup,
+menu, footer, header, nav, section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
 }
 
-#content {
-  padding: 75px;
-  padding-top: 0px;
+article, aside, canvas, figure, figure img, figcaption, hgroup,
+footer, header, nav, section, audio, video {
+	display: block;
+}
+
+a img {border: 0;}
+
+
+
+/*	Typography presets
+	------------------	*/
+
+.gigantic {
+	font-size: 123px;
+	line-height: 132px;
+	letter-spacing: -2px;
+}
+
+.huge, h1 {
+	font-size: 76px;
+	line-height: 84px;
+	letter-spacing: -1px;
+}
+
+.large, h2 {
+	font-size: 47px;
+	line-height: 48px;
+}
+
+.bigger, h3 {
+	font-size: 29px;
+	line-height: 36px;
+}
+
+.big, h4 {
+	font-size: 25px;
+	line-height: 30px;
+}
+
+body {
+	font: 18px/24px "Times New Roman", Times, serif;
+}
+
+.small, small {
+	font-size: 13px;
+	line-height: 18px;
+}
+
+/* Selection colours (easy to forget) */
+
+::selection 	 	{background: rgb(255,255,158);}
+::-moz-selection 	{background: rgb(255,255,158);}
+img::selection 		{background: transparent;}
+img::-moz-selection	{background: transparent;}
+body {-webkit-tap-highlight-color: rgb(255,255,158);}
+
+
+
+/*		Default Layout: 992px.
+		Gutters: 24px.
+		Outer margins: 48px.
+		Leftover space for scrollbars @1024px: 32px.
+-------------------------------------------------------------------------------
+cols    1     2      3      4      5      6      7      8      9      10
+px      68    160    252    344    436    528    620    712    804    896    */
+
+body {
+	width: 896px;
+	padding: 72px 48px 84px;
+	background: rgb(232,232,232);
+	color: rgb(60,60,60);
+	-webkit-text-size-adjust: 100%; /* Stops Mobile Safari from auto-adjusting font-sizes */
+}
+
+
+
+/*		Tablet Layout: 768px.
+		Gutters: 24px.
+		Outer margins: 28px.
+		Inherits styles from: Default Layout.
+-----------------------------------------------------------------
+cols    1     2      3      4      5      6      7      8
+px      68    160    252    344    436    528    620    712    */
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+
+	body {
+		width: 712px;
+		padding: 48px 28px 60px;
+	}
+}
+
+
+
+/*		Mobile Layout: 320px.
+		Gutters: 24px.
+		Outer margins: 34px.
+		Inherits styles from: Default Layout.
+---------------------------------------------
+cols    1     2      3
+px      68    160    252    */
+
+@media only screen and (max-width: 767px) {
+
+	body {
+		width: 252px;
+		padding: 48px 34px 60px;
+	}
+
+}
+
+
+
+/*		Wide Mobile Layout: 480px.
+		Gutters: 24px.
+		Outer margins: 22px.
+		Inherits styles from: Default Layout, Mobile Layout.
+------------------------------------------------------------
+cols    1     2      3      4      5
+px      68    160    252    344    436    */
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+
+	body {
+		width: 436px;
+		padding: 36px 22px 48px;
+	}
+
+}
+
+
+/*	Retina media query.
+	Overrides styles for devices with a
+	device-pixel-ratio of 2+, such as iPhone 4.
+-----------------------------------------------    */
+
+@media
+	only screen and (-webkit-min-device-pixel-ratio: 2),
+	only screen and (min-device-pixel-ratio: 2) {
+
+	/* body {
+
+	} */
+
+}
+
+body {
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'Quicksand', sans-serif;
+  background-color: #FFE2E2;
 }
 
 a {
@@ -29,10 +187,6 @@ a {
   padding: 0;
 }
 
-.smallfont {
-  font-size: 0.8em;
-}
-
 #main-logo {
   width: 700px;
   max-width: 100%;
@@ -44,15 +198,75 @@ a {
 #footer {
   position: absolute;
   bottom: 0;
-  left: 0;
-  width: 100%;
+  left: 50px;
+  right: 0; 
   font-size: 0.7em;
-  color: darkgrey;
+  color: dimgrey;
 }
 
-.centered {
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
+.row {
+  overflow: hidden;
+}
+
+label {
+  width: 33%;
+  box-sizing: border-box;
+  float: left;
+  text-align: right;
+  margin: 14px 0px;
+}
+
+input, textarea, select {
+  float: right;
+  width: 66%;
+  padding: 6px 12px;
+  margin: 8px 0px;
+  box-sizing: border-box;
+  font-family: 'Quicksand', sans-serif;
+}
+
+textarea {
+  resize: none;
+}
+
+button {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1em;
+  color: #46b58a;
+  background: white;
+  border: 1px solid darkgrey;
+}
+
+button:hover {
+  background: #e9f2e9;
+}
+
+/* .centered-text {
+  text-align: center;
+} */
+
+.wrapper {
+  width: 100%;
+  background: whitesmoke;
+  padding: 50px 50px;
+  margin-left: 0px;
+  margin-right: 0px;
+  box-sizing: border-box;
+  border: 1px solid darkgrey;
+}
+
+.red {
+  color: crimson;
+}
+
+.offset {
+  margin-left: calc(33% + 8px);
+}
+
+.hidden {
+  display: none;
+}
+
+.errMsg {
+  margin-top: -12px;
 }
