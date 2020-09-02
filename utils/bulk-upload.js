@@ -2,6 +2,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const pool = require('../bin/db');
 const logger = require('./logger');
+const q = require('./queries');
 
 const dropIfQuery = 'DROP TABLE IF EXISTS bathrooms';
 const createIndLat = 'CREATE INDEX idx_lat ON bathrooms(lat)';
@@ -30,11 +31,7 @@ CREATE TABLE bathrooms (
 )
 `;
 
-const addBathroomQuery = `
-INSERT INTO bathrooms(name, category, address, hours, handicap, formatted_address, 
-  lat, lng, location_type, viewport_ne_lat, viewport_ne_lng, viewport_sw_lat, 
-  viewport_sw_lng, place_id, plus_code_compound, plus_code_global, types) 
-  VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)`;
+const addBathroomQuery = q.addBathroom;
 
 pool.query(dropIfQuery)
   .then(() => pool.query(makeTableQuery))

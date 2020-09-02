@@ -25,6 +25,16 @@ const { deleteDupes } = require('./queries');
 // `;
 
 // const query = `
+// CREATE TABLE new_bathroom_requests (
+//   id serial primary key,
+//   name varchar,
+//   category varchar,
+//   address varchar,
+//   hours varchar,
+//   time_submitted timestamp DEFAULT NOW()
+// )`;
+
+// const query = `
 // CREATE TABLE texts_received (
 //   id serial primary key,
 //   phone_number varchar,
@@ -55,9 +65,14 @@ const { deleteDupes } = require('./queries');
 // WHERE last_active > now() - INTERVAL '3 days'
 // `;
 
-const query = `
-SELECT DISTINCT category FROM bathrooms`;
+// const query = `
+// SELECT DISTINCT category FROM bathrooms`;
 
-pool.query(query)
+// const query = `
+// ALTER TABLE bathrooms
+// ADD CONSTRAINT unique_place_id
+// UNIQUE (place_id)`;
+
+pool.query('select * from bathrooms order by id desc')
   .then((res) => logger.info(res.rows))
   .catch((err) => logger.error(err));

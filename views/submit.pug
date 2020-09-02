@@ -46,7 +46,11 @@ block content
       div.row.hidden.errMsg(id='zipErr')
         span.offset.small.red This is a required field
       div.row
-        button.offset(type='submit') Submit
+        button.offset.ld-ext-right#submit-button(type='submit') Submit
+          div.ld.ld-ring.ld-spin
+  br
+  div 
+    a(href='/') Go back home
   script.
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -109,7 +113,23 @@ block content
           headers: { 
           'Content-type': 'application/json; charset=UTF-8'
           } 
+        }).then((res) => {
+          switch (res.status) {
+            case 201: 
+              window.location.href = '/submit/success';
+              break;
+            case 202:
+              window.location.href = '/submit/pending';
+              break;
+            case 400:
+              window.location.href = '/submit/already-exists';
+              break;
+          }
+        })
+        .catch((err) => {
+          console.error(err)
         });
+        document.getElementById('submit-button').classList.add('running');
       } else {
         return false;
       }
