@@ -58,26 +58,32 @@ block content
       });
 
       // form validation
+      let isValid = true;
+
       if (!formValues.venueName) {
         document.getElementById('venueNameErr').style.display = 'block';
+        isValid = false;
       } else {
         document.getElementById('venueNameErr').style.display = 'none';
       }
 
       if (!formValues.venueType) {
         document.getElementById('venueTypeErr').style.display = 'block';
+        isValid = false;
       } else {
         document.getElementById('venueTypeErr').style.display = 'none';
       }
 
       if (!formValues.streetAddr) {
         document.getElementById('streetAddrErr').style.display = 'block';
+        isValid = false;
       } else {
         document.getElementById('streetAddrErr').style.display = 'none';
       }
 
       if (!formValues.city) {
         document.getElementById('cityErr').style.display = 'block';
+        isValid = false;
       } else {
         document.getElementById('cityErr').style.display = 'none';
       }
@@ -86,21 +92,27 @@ block content
         const zipErr = document.getElementById('zipErr');
         zipErr.childNodes[0].innerText = 'This is a required field';
         zipErr.style.display = 'block';
+        isValid = false;
       } else if (!formValues.zip.match(/^\d{5}$/)) {
         const zipErr = document.getElementById('zipErr');
         zipErr.childNodes[0].innerText = 'Invalid zip code';
         zipErr.style.display = 'block';
+        isValid = false;
       } else {
         document.getElementById('zipErr').style.display = 'none';
       }
 
-      fetch('/api/submit', {
-        method: 'POST',
-        body: JSON.stringify(formValues),
-        headers: { 
-        'Content-type': 'application/json; charset=UTF-8'
-        } 
-      })
+      if (isValid) {
+        fetch('/api/submit', {
+          method: 'POST',
+          body: JSON.stringify(formValues),
+          headers: { 
+          'Content-type': 'application/json; charset=UTF-8'
+          } 
+        });
+      } else {
+        return false;
+      }
     } 
 
 
