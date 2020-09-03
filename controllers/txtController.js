@@ -12,14 +12,14 @@ const bitlyClient = new BitlyClient(process.env.BITLY_ACCESS_TOKEN, {});
 const notFoundStr = 'Address not found.';
 const multiResStr = 'Multiple address matches. Please be more specific.';
 
-const helpText = `Welcome to Let-Me-P NYC!
+const helpText = `Welcome to Ask George!
  
 Text us your address and we'll send you the closest restrooms to you.
 Try an an intersection ("45th st & 8th Ave") or a street address ("150 Park Ave, Manhattan").
 
 1-325-8-LET-ME-P
 1-325-853-8637
-bit.ly/31xcOVI`;
+ask-george.herokuapp.com`;
 
 const getSearchStr = (input) => {
   const txt = input.trim();
