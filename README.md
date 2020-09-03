@@ -5,9 +5,9 @@
 ## What
 
 Ask George is an SMS service that texts you the nearest public restrooms in NYC based on your location.
-
 To get started, send a text to 1-3258-LET-ME-P (1-325-853-8637).
 
+The name derives from [Seinfeld](https://www.youtube.com/watch?v=JYVBRQ7t46g).
 Data scraped from [nyrestroom.com](http://m3.mappler.net/nyrestroom/).
 
 ## Tech
