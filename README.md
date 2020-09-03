@@ -23,7 +23,7 @@ Stack:
 
 ## Author
 
-Anna Teng / [email me](mailto:anna.w.teng@gmail.com?subject=[Ask George])
+Anna Teng / [email me](mailto:anna.w.teng@gmail.com?subject=[Ask%20George])
 
 ## License
 
