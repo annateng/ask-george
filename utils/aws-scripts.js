@@ -73,6 +73,18 @@ const { deleteDupes } = require('./queries');
 // ADD CONSTRAINT unique_place_id
 // UNIQUE (place_id)`;
 
-pool.query('select * from bathrooms order by id desc')
+// const query = `
+// CREATE TABLE user_feedback (
+//   id serial primary key,
+//   email varchar,
+//   received_at timestamp DEFAULT NOW()
+// )`;
+
+const query = `
+ALTER TABLE user_feedback
+ADD COLUMN feedback varchar
+`;
+
+pool.query(query)
   .then((res) => logger.info(res.rows))
   .catch((err) => logger.error(err));

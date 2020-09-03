@@ -114,7 +114,6 @@ const getResponseStr = (res) => {
             // logger.info(shortUrl);
 
             resolve(`
-ID: ${det.id}
 Name: ${name}
 Type: ${type}
 Distance: ${distance}

@@ -6,15 +6,15 @@ block content
     br
     form(onsubmit='handleSubmit(event);')
       div.row
-        label(for='venueName') Venue Name
+        label.left(for='venueName') Venue Name
           span.red *
-        input(type='text', id='venueName', name='venueName')
+        input.right(type='text', id='venueName', name='venueName')
       div.row.hidden.errMsg(id='venueNameErr')
         span.offset.small.red This is a required field
       div.row
-        label(for='venueType') Venue Type
+        label.left(for='venueType') Venue Type
           span.red *
-        select(name='venueType', id='venueType')
+        select.right(name='venueType', id='venueType')
           option.hidden
           option(value='public') Public
           option(value='fastFood') Fast Food
@@ -24,25 +24,25 @@ block content
       div.row.hidden.errMsg(id='venueTypeErr')
         span.offset.small.red This is a required field
       div.row
-        label(for='hours') Hours
-        textarea(name='hours', id='hours', rows=5)
+        label.left(for='hours') Hours
+        textarea.right(name='hours', id='hours', rows=5)
       div.row
       div.row
-        label(for='streetAddr') Street Address
+        label.left(for='streetAddr') Street Address
           span.red *
-        input(type='text', id='streetAddr', name='streetAddr')
+        input.right(type='text', id='streetAddr', name='streetAddr')
       div.row.hidden.errMsg(id='streetAddrErr')
         span.offset.small.red This is a required field
       div.row
-        label(for='city') City
+        label.left(for='city') City
           span.red *
-        input(type='text', id='city', name='city')
+        input.right(type='text', id='city', name='city')
       div.row.hidden.errMsg(id='cityErr')
         span.offset.small.red This is a required field
       div.row
-        label(for='zip') Zip Code
+        label.left(for='zip') Zip Code
           span.red *
-        input(type='text', id='zip', name='zip')
+        input.right(type='text', id='zip', name='zip')
       div.row.hidden.errMsg(id='zipErr')
         span.offset.small.red This is a required field
       div.row
@@ -55,7 +55,7 @@ block content
     const handleSubmit = (e) => {
       e.preventDefault();
       // get values
-      const formData = new FormData(event.target);
+      const formData = new FormData(e.target);
       const formValues = {};
       formData.forEach((val, key) => {
         formValues[key] = val;

@@ -18,5 +18,65 @@ block content
       br
       div
         a(href='https://github.com/annateng/ask-george') View code on Github
+  br
+  br
+  div.alert.hidden#feedback-alert Thanks! Your feedback is appreciated.
+  h4 Have feedback?
+  form(onsubmit='handleFeedback(event);')
+    div.row
+      label(for='email') E-mail Address
+        span.red *
+    div.row
+      input(type='text', id='email', name='email', style='width:100%;')
+    div.row.hidden.errMsg(id='emailErr')
+      span.small.red This is a required field
+    div.row
+      label(for='feedback') Message
+    div.row
+      textarea(name='feedback', id='feedback', rows=10, style='width:100%;')
+    div.row
+      button.ld-ext-right#submit-button(type='submit') Send Feedback
+        div.ld.ld-ring.ld-spin
+  script.
+    const handleFeedback = (e) => {
+      e.preventDefault();
+      // get values
+      const formData = new FormData(e.target);
+      const formValues = {};
+      formData.forEach((val, key) => {
+        formValues[key] = val;
+      });
+
+      // validation
+      if (!formValues.email) {
+        const emailErr = document.getElementById('emailErr');
+        emailErr.childNodes[0].innerText = 'This is a required field'; 
+        emailErr.style.display = 'block';
+      } else if (!formValues.email.toLowerCase().match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+        const emailErr = document.getElementById('emailErr');
+        emailErr.childNodes[0].innerText = 'Invalid email address'; 
+        emailErr.style.display = 'block';
+      } else {
+        emailErr.style.display = 'none';
+        
+        fetch('/api/feedback', {
+          method: 'POST',
+          body: JSON.stringify(formValues),
+          headers: { 
+          'Content-type': 'application/json; charset=UTF-8'
+          }
+        }).then((res) => {
+          if (res.status === 201) {
+            document.getElementById('submit-button').classList.remove('running');
+            document.getElementById('feedback-alert').style.display = 'block';
+            document.getElementById('feedback').value = '';
+            setTimeout(() => { document.getElementById('feedback-alert').style.display = 'none'; }, 5000);
+          } else {
+            throw new Error('unknown status');
+          }
+        }).catch((err) => console.error(err));
+        document.getElementById('submit-button').classList.add('running');
+      }
+    }
 
   

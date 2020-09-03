@@ -100,6 +100,9 @@ INSERT INTO bathrooms(name, category, address, hours, handicap, formatted_addres
   viewport_sw_lng, place_id, plus_code_compound, plus_code_global, types) 
   VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)`;
 
+const addFeedback = `
+INSERT INTO user_feedback(email, feedback) VALUES($1, $2)`;
+
 module.exports = {
   checkUserQuery,
   newUserQuery,
@@ -117,4 +120,5 @@ module.exports = {
   submitRequest,
   getByPlaceId,
   addBathroom,
+  addFeedback,
 };
