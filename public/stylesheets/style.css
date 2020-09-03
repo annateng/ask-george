@@ -187,6 +187,7 @@ h5 {
 
 input, textarea, select, option {
   font-family: 'Quicksand', sans-serif;
+  box-sizing: border-box;
 }
 
 input, textarea {
