@@ -1,6 +1,6 @@
 # Ask George
 
-![Ask George Logo](public/images/Ask george horizontal.jpg)
+![Ask George Logo](public/images/Ask%20george%20horizontal.jpg)
 
 ## What
 
